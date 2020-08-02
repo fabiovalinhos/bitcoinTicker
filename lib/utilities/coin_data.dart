@@ -33,24 +33,31 @@ const List<String> cryptoList = [
 ];
 
 const coinAPIURL = 'https://rest.coinapi.io/v1/exchangerate';
-const apiKey = 'F890B9BE-53BB-41B5-8CE8-C3AB4FD8E524';
+const apiKey = '';
 
 class CoinData {
   Future getCoinData(String selectedCurrency) async {
-    String requestUrl = '$coinAPIURL/BTC/$selectedCurrency?apikey=$apiKey';
-    http.Response response = await http.get(requestUrl);
-    print('coin_data.dart - Status Code : ${response.statusCode}');
+    Map<String, String> cryptoPrices = {};
 
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
+    for (String crypto in cryptoList) {
+      String requestUrl =
+          '$coinAPIURL/$crypto/$selectedCurrency?apikey=$apiKey';
+      http.Response response = await http.get(requestUrl);
+      print(
+          'coin_data.dart - Status Code for $crypto : ${response.statusCode}');
 
-      var lastPrice = data['rate'];
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
 
-      return lastPrice;
-    } else {
-      print(response.statusCode);
+        double lastPrice = data['rate'];
 
-      throw 'Problem with the get request';
+        cryptoPrices[crypto] = lastPrice.toStringAsFixed(0);
+      } else {
+        print(response.statusCode);
+        throw 'Problem with the get request';
+      }
     }
+
+    return cryptoPrices;
   }
 }
