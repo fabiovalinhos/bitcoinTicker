@@ -33,11 +33,11 @@ const List<String> cryptoList = [
 ];
 
 const coinAPIURL = 'https://rest.coinapi.io/v1/exchangerate';
-const apiKey = '';
+const apiKey = 'F890B9BE-53BB-41B5-8CE8-C3AB4FD8E524';
 
 class CoinData {
-  Future getCoinData() async {
-    String requestUrl = '$coinAPIURL/BTC/USD?apikey=$apiKey';
+  Future getCoinData(String selectedCurrency) async {
+    String requestUrl = '$coinAPIURL/BTC/$selectedCurrency?apikey=$apiKey';
     http.Response response = await http.get(requestUrl);
     print('coin_data.dart - Status Code : ${response.statusCode}');
 
